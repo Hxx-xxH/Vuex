@@ -127,7 +127,7 @@ const app = new Vue({
 
 ```js
 const Counter = {
-  template: `<div>{{ count }}</div>`,
+	template: `<div>{{ count }}</div>`,
   computed: {
     count () {
       return this.$store.state.count
@@ -137,6 +137,64 @@ const Counter = {
 ```
 
 **`mapState` 辅助函数**
+
+当一个组件需要获取多个状态的时候，将这些状态都声明为计算属性会有些重复和冗余。为了解决这个问题，我们可以使用 `mapState` 辅助函数帮助我们生成计算属性:
+
+```js
+state: {
+  count: 0,
+  todos: [
+    { id: 1, text: '...', done: true },
+    { id: 2, text: '...', done: false }
+  ],
+},
+```
+
+```js
+1.
+computed: mapState({
+  // 箭头函数可使代码更简练
+  count: state => state.count,
+  // 传字符串参数 'count' 等同于 `state => state.count` countAlias = count
+  countAlias: 'count',
+  count2: 'count',
+  // 为了能够使用 `this` 获取局部状态，必须使用常规函数
+  countPlusLocalState(state) {
+      return state.count + this.localCount
+  }
+}) // mapState返回的是一个对象,将该对象赋值给computed
+
+2.
+computed: mapState([
+  // 映射 this.count 为 store.state.count
+  'count','todos'
+]),
+```
+
+我们如何将它与局部计算属性混合使用呢？通常，我们需要使用一个工具函数将多个对象合并为一个，以使我们可以将最终对象传给 `computed` 属性。但是自从有了[对象展开运算符](https://github.com/tc39/proposal-object-rest-spread)，我们可以极大地简化写法:
+
+```js
+data() {
+  return {
+      localCount: 4
+  }
+},
+
+computed:{
+  countPlusLocalState() {
+      return this.localCount;
+  },
+  ...mapState([
+      // 映射 this.count 为 store.state.count
+      'count',
+      "todos"
+  ]),
+}
+```
+
+使用 Vuex 并不意味着你需要将**所有的**状态放入 Vuex。虽然将所有的状态放到 Vuex 会使状态变化更显式和易调试，但也会使代码变得冗长和不直观。如果有些状态严格属于单个组件，最好还是作为组件的局部状态。你应该根据你的应用开发需要进行权衡和确定。
+
+#### Getter
 
 
 
