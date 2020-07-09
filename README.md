@@ -257,7 +257,7 @@ getters: {
 store.getters.doneTodosCount // -> 1
 ```
 
-![image-20200709223331751](README.assets/image-20200709223331751.png)
+![image-20200710003133796](README.assets/image-20200710003133796.png)
 
 我们可以很容易地在任何组件中使用它：
 
