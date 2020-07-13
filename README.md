@@ -733,7 +733,7 @@ const moduleA = {
 
 默认情况下，模块内部的 `action`、``mutation` 和 `getter `是注册在**全局命名空间**的——这样使得多个模块能够对同一 `mutation` 或 `action `作出响应,且会出现同名函数,重名函数会以数组形式储存,调用该函数名会调用所有重名函数,当传入的参数是`payload`的形式,会共用`payload`。
 
-**``getters`:**
+**`getters`:**
 
 ![image-20200713200925592](README.assets/image-20200713200925592.png)
 
@@ -759,7 +759,7 @@ const moduleA = {
 
 启用了命名空间的 getter 和 action 会收到局部化的 `getter`，`dispatch` 和 `commit`。换言之，你在使用模块内容（module assets）时不需要在同一模块内额外添加空间名前缀。更改 `namespaced` 属性后不需要修改模块内的代码。
 
-**``getters`:**
+**`getters`:**
 
 ![image-20200713203020519](README.assets/image-20200713203020519.png)
 
