@@ -10,6 +10,7 @@
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/vuex@3.4.0/dist/vuex.js"></script>
+    <!--CDN引入 -->
     <style>
         div {
             background-color: wheat;
@@ -38,7 +39,7 @@
                 return { count: 100 };
             },
             getters: {
-                addCountA(state, getters, rootState,rootGetters) {
+                addCountA(state, getters, rootState, rootGetters) {
                     console.log(`state.count的值为${state.count}`);
                     console.log(`rootState.count的值为${rootState.count}`);
                     console.log(`rootGetters.addCountB的值为${rootGetters.addCountB}`);
@@ -46,7 +47,7 @@
                 }//在moduleA添加`namespaced: true`的情况下,用store.getters["moduleA/addCountA"]来调用;
             },
             mutations: {
-                 incrementN(state, n) {
+                incrementN(state, n) {
                     console.log(`n的值为:${n}`);
                     n += state.count;
                     console.log(`n的值为:${n}`);
@@ -62,19 +63,19 @@
                 }
             },
             actions: {
-                [`${increment}PL`]({ commit,rootState,rootGetters}, payLoad) {
+                [`${increment}PL`]({ commit, rootState, rootGetters }, payLoad) {
                     // console.log(arguments);
                     console.log(`rootstate.count:${rootState.count}`);
                     console.log(`rootGetters.addCountB:${rootGetters.addCountB}`);
                     commit(`${increment}PL`, payLoad);
                 },//默认情况下,module中的actions的属性名可以与store中的重名,重名函数会以数组形式出现在store._actions中,且共用一个payload,即module中的函数调用时即使传入payLoad也是无效的
-                [`${increment}OnRoot`]({commit,dispatch},payLoad){
-                    commit("incrementForModules",payLoad,{root:true});
-                    dispatch("incrementForModules",payLoad,{root:true});
+                [`${increment}OnRoot`]({ commit, dispatch }, payLoad) {
+                    commit("incrementForModules", payLoad, { root: true });
+                    dispatch("incrementForModules", payLoad, { root: true });
                 },
-                [`${increment}ForModules`]:{
-                    root:true,//在带命名空间的模块注册全局 action
-                    handler(context,payLoad){
+                [`${increment}ForModules`]: {
+                    root: true,//在带命名空间的模块注册全局 action
+                    handler(context, payLoad) {
                         console.log(1);
                     }
                 }
@@ -105,7 +106,7 @@
             mutations: {
                 [`${increment}ModuleA`](state, payLoad) {
                     return console.log(state.count + payLoad.n);
-                }, 
+                },
                 [`${increment}PL`](state, payLoad) {
                     console.log(`state.count的值为:${state.count}`);
                     console.log(`payLoad.n的值A为:${payLoad.n}`);
@@ -131,9 +132,9 @@
                     console.log(`state.count的值:${state.count}`);
                 },
                 incrementN(state, n) {
-                     console.log(`n的值为:${n}`);
+                    console.log(`n的值为:${n}`);
                     n += state.count;
-                     console.log(`n的值为:${n}`);
+                    console.log(`n的值为:${n}`);
                     console.log(`state.count+n的值:${n}`);
                 },
                 incrementPL(state, payLoad) {
@@ -145,7 +146,7 @@
                 [increment + "Dynamic"](state) {
                     console.log("动态计算属性名");
                 },
-                 [`${increment}ForModules`](state, payLoad) {
+                [`${increment}ForModules`](state, payLoad) {
                     console.log(payLoad);
                     console.log("this is global mutation for modules");
                 }
@@ -157,9 +158,14 @@
                 doneTodosCount: (state, getters) => {
                     return getters.doneTodos.length
                 },
-                getTodoById: (state) => (id) => {
+                // getTodoById: (state) => (id) => {                 // 等价于getTodoById(state){return function(id){return state.todos.find(todo => todo.id === id)}}
+                //     return state.todos.find(todo => todo.id === id)
+                // },
+                getTodoById(state) {
+                  return function (id) {
                     return state.todos.find(todo => todo.id === id)
                 }
+              },
             },
             actions: {
                 [`${increment}A`](context) {
@@ -176,7 +182,7 @@
                     // console.log(arguments);
                     commit(`${increment}PL`, payLoad);
                 },
-                [`${increment}ForModules`]({commit,dispatch},payLoad){
+                [`${increment}ForModules`]({ commit, dispatch }, payLoad) {
                     console.log(payLoad);
                     console.log("this is global action for modules");
                 }
@@ -211,8 +217,8 @@
                 ...mapActions([`${increment}A`, `${increment}B`]),
                 ...mapActions({ [`payLoad2`]: `${increment}PL` }),
                 ...mapMutations([`moduleA/${increment}ModuleA`]),
-                ...mapMutations({[`${increment}ModuleA`]:`moduleA/${increment}ModuleA`}),
-                ...mapActions(`moduleA`,[`${increment}OnRoot`]),
+                ...mapMutations({ [`${increment}ModuleA`]: `moduleA/${increment}ModuleA` }),
+                ...mapActions(`moduleA`, [`${increment}OnRoot`]),
             },
             // computed: {
             //     count(){
@@ -248,10 +254,10 @@
                 },
                 ...mapGetters(["doneTodos", "doneTodosCount"]),
                 ...mapGetters({ getID: "getTodoById" }),
-                ...mapState({countA:state=>state.moduleA.count}),
+                ...mapState({ countA: state => state.moduleA.count }),
                 ...mapState(["moduleB"]),
                 // ...mapState("moduleA/moduleAA",["count"]),
-                ...mapState("moduleA/moduleAA",{["countAA"]:state=>state.count}),
+                ...mapState("moduleA/moduleAA", { ["countAA"]: state => state.count }),
             },
             components: {
                 comA: {
