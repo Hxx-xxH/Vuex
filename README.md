@@ -737,11 +737,11 @@ const moduleA = {
 
 ![image-20200713200925592](README.assets/image-20200713200925592.png)
 
-`mutations`:
+**`mutations`:**
 
 ![image-20200713201110502](README.assets/image-20200713201110502.png)
 
-`actions`:
+**`actions`:**
 
 ![image-20200713201204002](README.assets/image-20200713201204002.png)
 
@@ -763,11 +763,11 @@ const moduleA = {
 
 ![image-20200713203020519](README.assets/image-20200713203020519.png)
 
-`mutations`:
+**`mutations`:**
 
 ![image-20200713203113788](README.assets/image-20200713203113788.png)
 
-`actions`:
+**`actions`:**
 
 ![image-20200713203208659](README.assets/image-20200713203208659.png)
 
